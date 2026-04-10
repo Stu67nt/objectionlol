@@ -2,6 +2,9 @@
     transform flip:
         xzoom -1.0
 
+default persistent.good_ending = False
+default persistent.bad_ending = False
+
 #creating bubbles
 image holdit:
     "holdit.gif"
@@ -184,6 +187,7 @@ image maya mad:
 
 # The game starts here.
 label start:
+    play music "Court_Begins_-_Phoenix_Wright_-_Ace_Attorney_OST.mp3" loop
     scene prosecution bg
     show prosecution_bg
     show edgeworth thinking zorder 1:
@@ -212,19 +216,25 @@ label start:
     menu:
         "What is 77+33?"
         "77+33=100":
-            jump bad
-        "77+33=110":
+            show holdit at truecenter zorder 3
+            play sound "Phoenix - Hold it.mp3"
+            pause 1.4
             jump good
+        "77+33=110":
+            show holdit at truecenter zorder 3
+            play sound "Phoenix - Hold it.mp3"
+            pause 1.4
+            jump bad
 
 
-label good:
+label bad:
     scene defence bg
     show defence_bg
     show pheonix coffee zorder 1:
         yoffset 20
     show defence bench zorder 2:
         xoffset -200
-    pheonix "77+33=100"
+    pheonix "77+33=110"
 
     scene prosecution bg
     show prosecution_bg
@@ -243,11 +253,14 @@ label good:
         xoffset -200
     pheonix "Oh nothing, i think the judge is comming back"
 
-    "Please select the other  option I put way more time into \nthat one. This is just for the requiement"
+    if persistent.good_ending == False:
+        "Please select the other option I put way more time into \nthat one. This is just for the requiement."
+
+    $ persistent.bad_ending = True
 
     return
 
-label bad:
+label good:
     scene defence bg
     show defence_bg
     show pheonix coffee zorder 1:
@@ -255,6 +268,8 @@ label bad:
     show defence bench zorder 2:
         xoffset -200
     pheonix "77+33=100"
+
+    play music "Phoenix_Wright_Ace_Attorney_OST_-_Pressing_Pursuit__Cornered.mp3" loop
 
     scene prosecution bg
     show prosecution_bg
@@ -455,6 +470,8 @@ label bad:
     show maya thinking zorder 1:
         yoffset 20
     show witness stand zorder 2
+    stop music
+    play music "Phoenix_Wright_Ace_Attorney_OST_-_Maya_Fey__Turnabout_Sisters_Theme_2001.mp3" loop
     maya "can we stop arguing"
 
     scene defence bg
@@ -479,6 +496,8 @@ label bad:
         yoffset 20
     show prosecution bench zorder 2:
         xoffset 200
+    stop music
+    play music "Court_Begins_-_Phoenix_Wright_-_Ace_Attorney_OST.mp3" loop
     franziska "ok we do the thing now"
 
     scene prosecution bg
@@ -545,6 +564,8 @@ label bad:
         xoffset -200
     apollo "It's 100"
 
+    stop music
+    play music "Phoenix_Wright_Ace_Attorney_OST_-_Pressing_Pursuit__Cornered.mp3" loop
     scene prosecution bg
     show prosecution_bg
     show edgeworth strained at flip zorder 1:
@@ -577,7 +598,7 @@ label bad:
         xoffset 200
     godot "Shut the hell up"
 
-    "Godot threw a mug but the animation budget was 0 so no actual annimation"
+    "Godot threw a mug but the animation \nbudget was 0 so no actual annimation"
 
     scene defence bg
     show defence_bg
@@ -646,7 +667,8 @@ label bad:
     franziska "It's 99"
 
     show objection at truecenter zorder 3
-    pause 1
+    play sound "Phoenix - objection.mp3"
+    pause 1.5
 
     scene defence bg
     show defence_bg
@@ -656,6 +678,8 @@ label bad:
         xoffset -200
     pheonix "66+33=99"
 
+    stop music
+    play music "Phoenix_Wright_-_Trials_and_Tribulations_OST_-_Pressing_Pursuit__Caught.mp3" loop
     scene prosecution bg
     show prosecution_bg
     show edgeworth confident zorder 1:
@@ -663,6 +687,7 @@ label bad:
     show prosecution bench zorder 2:
         xoffset 200
     godot "Congratulations on being smart for the first time"
+
 
     scene prosecution bg
     show prosecution_bg
@@ -782,7 +807,8 @@ label bad:
 
     # Add holdit sound
     show holdit at truecenter zorder 3
-    pause 1
+    play sound "Phoenix - Hold it.mp3"
+    pause 1.4
 
     scene prosecution bg
     show prosecution_bg
@@ -799,5 +825,10 @@ label bad:
     show prosecution bench zorder 2:
         xoffset 200
     edgeworth "i hate u"
+
+    if persistent.bad_ending == False:
+        "Try the other option or don't idk im not ur mum."
+
+    $ persistent.good_ending = True
 
     return
